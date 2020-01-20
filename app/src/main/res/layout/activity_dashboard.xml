@@ -18,6 +18,7 @@
         android:textSize="22sp"
         app:layout_constraintBottom_toTopOf="@+id/chart_mpa"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.15"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -72,6 +73,7 @@
         android:fontFamily="cursive"
         android:onClick="logoutClick"
         android:text="@string/logout"
+        android:textSize="18sp"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textColor="@color/colorAccent"
         app:layout_constraintBottom_toTopOf="@+id/chart_mpa"

@@ -1,11 +1,16 @@
 package com.sayhitoiot.graphqlappiatest.ui.activityes.dashboard
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.Window
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.github.mikephil.charting.components.LimitLine
@@ -21,6 +26,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.sayhitoiot.graphqlappiatest.R
 import com.sayhitoiot.graphqlappiatest.util.MyValueFormatter
 import kotlinx.android.synthetic.main.activity_dashboard.*
+import kotlinx.android.synthetic.main.dialog_signout.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -62,12 +68,18 @@ class DashBoardActivity : AppCompatActivity(), CoroutineScope, DashBoardContract
     }
 
     fun logoutClick(view: View){
-        val prefs = this.getSharedPreferences("my_token_data", Context.MODE_PRIVATE)
-        with (prefs.edit()) {
-            putString("token", "")
-            commit()
+        val layout = LayoutInflater.from(this).inflate(R.layout.dialog_signout, null, false)
+        val dialog = AlertDialog.Builder(this).setView(layout)
+        dialog.setNegativeButton("Cancelar", null)
+        dialog.setPositiveButton("Sim") { d, i ->
+            val prefs = this.getSharedPreferences("my_token_data", Context.MODE_PRIVATE)
+            with (prefs.edit()) {
+                putString("token", "")
+                commit()
+            }
+            finish()
         }
-        finish()
+        dialog.create().show()
     }
 
     override fun plotterGraph(lineDataSet: LineDataSet) {

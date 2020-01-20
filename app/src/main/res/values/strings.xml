@@ -7,4 +7,7 @@
     <string name="minhas_medicoes">Minhas Medições</string>
     <string name="mg_dl">_ mg/dl</string>
     <string name="logout">logout</string>
+    <string name="deseja_finalizar_sessao">Deseja finalizar sessão?</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="sim">Sim</string>
 </resources>
