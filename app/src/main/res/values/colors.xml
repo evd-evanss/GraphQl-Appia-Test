@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#FF0E88</color>
+    <color name="colorPrimaryDark">#ffffff</color>
+    <color name="colorAccent">#FF0E88</color>
+
+
+    <color name="colorHipoglicemia">#5120DD</color>
+    <color name="colorNormal">#039500</color>
+    <color name="colorHiperglicemia">#C60000</color>
+</resources>
