@@ -52,27 +52,28 @@ class DashBoardPresenter(
     override fun configDataSetValues(values: MutableList<Entry>){
         // Configuro os dados recebidos e atribuo as cores de acordo com os valores
         val measuresDataset = LineDataSet(values, "")
-        val circle_colors :MutableList<Int>
-        circle_colors = ArrayList()
+        val colors_dataset :MutableList<Int>
+        colors_dataset = ArrayList()
         var pos = 0
 
         values.forEach{
             val entry: Entry = values.get(pos)
             Log.i("color", entry.y.toString())
             // valor <= 70 Hipoglicemia => pinta circulos de vermelho
-            if(entry.y <= 70f) circle_colors.add(pos, ColorTemplate.rgb("#5120DD"))
+            if(entry.y <= 70f) colors_dataset.add(pos, ColorTemplate.rgb("#5120DD"))
             // valor > 70 e < 180 Normal => pinta circulos de verde
-            if((entry.y >= 70f) and (entry.y <= 180f)) circle_colors.add(pos, ColorTemplate.rgb("#039500")) // VERDE
+            if((entry.y >= 70f) and (entry.y <= 180f)) colors_dataset.add(pos, ColorTemplate.rgb("#039500")) // VERDE
             // valor > 180 Hiperglicemia => pinta circulos de azul
-            if(entry.y > 180f) circle_colors.add(pos, ColorTemplate.rgb("#C60000"))
+            if(entry.y > 180f) colors_dataset.add(pos, ColorTemplate.rgb("#C60000"))
             pos++
         }
-        measuresDataset.setCircleColors(circle_colors)
+        measuresDataset.setCircleColors(colors_dataset)
         view.configAxisX()
         view.configAxisY()
         measuresDataset.lineWidth = 3f
         measuresDataset.circleRadius = 5f
         measuresDataset.circleHoleRadius = 0f
+        measuresDataset.setColors(colors_dataset)
         measuresDataset.setDrawFilled(true)
         view.plotterGraph(measuresDataset)
 

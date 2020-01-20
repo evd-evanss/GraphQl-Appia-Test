@@ -74,7 +74,7 @@ class DashBoardActivity : AppCompatActivity(), CoroutineScope, DashBoardContract
         measuresDataset = lineDataSet
         chart_mpa.setNoDataText("")
         chart_mpa.setPinchZoom(true)
-        measuresDataset.color = ContextCompat.getColor(this, R.color.colorAccent)
+        //measuresDataset.color = ContextCompat.getColor(this, R.color.colorAccent)
         val dataSet = java.util.ArrayList<ILineDataSet>()
         dataSet.add(0,measuresDataset)
         val lineData = LineData(dataSet)
