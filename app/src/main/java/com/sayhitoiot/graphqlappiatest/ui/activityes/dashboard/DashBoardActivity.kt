@@ -88,12 +88,13 @@ class DashBoardActivity : AppCompatActivity(), CoroutineScope, DashBoardContract
     override fun configAxisX() {
         val xAxis = chart_mpa.xAxis
         xAxis.axisLineColor = Color.BLACK
+        xAxis.textColor = ContextCompat.getColor(this, R.color.colorPrimaryDark)
         xAxis.setDrawAxisLine(false) // apaga linha X
         xAxis.setDrawGridLines(false) // apaga as linhas grids X
         xAxis.labelCount = 7
         xAxis.axisMinimum = -0.3f // altera offset de X
         //xAxis.spaceMax = 3f // define o comprimento da linha X
-        xAxis.textColor = Color.BLACK
+        //xAxis.textColor = Color.BLACK
         xAxis.textSize = 15f
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             xAxis.typeface =  resources.getFont(R.font.cursive_bold)
@@ -124,7 +125,7 @@ class DashBoardActivity : AppCompatActivity(), CoroutineScope, DashBoardContract
             yAxisLeft.typeface =  resources.getFont(R.font.cursive_bold)
         }
         yAxisLeft.setDrawGridLines(false)
-        yAxisLeft.axisLineColor = Color.BLACK // Cor da linha
+        yAxisLeft.textColor = ContextCompat.getColor(this, R.color.colorPrimaryDark)
         yAxisRight.isEnabled = false // Desabilita inhas Y a direita
 
         yAxisRight.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART)
@@ -141,15 +142,15 @@ class DashBoardActivity : AppCompatActivity(), CoroutineScope, DashBoardContract
     override fun onValueSelected(e: Entry?, h: Highlight?) {
 
         if(e?.y!! <= 70f){
-            tv_Entry.setBackgroundColor(
+            tv_Entry.setTextColor(
                 ContextCompat.getColor(this, R.color.colorHipoglicemia))
         }
         if((e.y >= 70f)and(e.y <=180f)){
-            tv_Entry.setBackgroundColor(
+            tv_Entry.setTextColor(
                 ContextCompat.getColor(this, R.color.colorNormal))
         }
         if(e.y >= 180f){
-            tv_Entry.setBackgroundColor(
+            tv_Entry.setTextColor(
                 ContextCompat.getColor(this,
                     R.color.colorHiperglicemia
                 ))
