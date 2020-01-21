@@ -26,6 +26,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.sayhitoiot.graphqlappiatest.R
 import com.sayhitoiot.graphqlappiatest.util.MyValueFormatter
 import kotlinx.android.synthetic.main.activity_dashboard.*
+import kotlinx.android.synthetic.main.dialog_signout.*
 import kotlinx.android.synthetic.main.dialog_signout.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -70,8 +71,8 @@ class DashBoardActivity : AppCompatActivity(), CoroutineScope, DashBoardContract
     fun logoutClick(view: View){
         val layout = LayoutInflater.from(this).inflate(R.layout.dialog_signout, null, false)
         val dialog = AlertDialog.Builder(this).setView(layout)
-        dialog.setNegativeButton("Cancelar", null)
-        dialog.setPositiveButton("Sim") { d, i ->
+
+        layout.bt_logout.setOnClickListener {
             val prefs = this.getSharedPreferences("my_token_data", Context.MODE_PRIVATE)
             with (prefs.edit()) {
                 putString("token", "")
@@ -79,6 +80,14 @@ class DashBoardActivity : AppCompatActivity(), CoroutineScope, DashBoardContract
             }
             finish()
         }
+        dialog.create().show()
+
+    }
+
+    fun tipsClick(view: View){
+        val layout = LayoutInflater.from(this).inflate(R.layout.dialog_tips, null, false)
+        val dialog = AlertDialog.Builder(this).setView(layout)
+        dialog.setNegativeButton("Voltar", null)
         dialog.create().show()
     }
 
@@ -107,21 +116,26 @@ class DashBoardActivity : AppCompatActivity(), CoroutineScope, DashBoardContract
         xAxis.axisMinimum = -0.3f // altera offset de X
         //xAxis.spaceMax = 3f // define o comprimento da linha X
         //xAxis.textColor = Color.BLACK
-        xAxis.textSize = 15f
+        xAxis.textSize = 20f
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            xAxis.typeface =  resources.getFont(R.font.cursive_bold)
+            xAxis.typeface =  resources.getFont(R.font.amatic_bold)
         }
 
         val limite_normal = LimitLine(180f, "")
         limite_normal.lineColor = Color.GREEN
-        limite_normal.lineWidth = 1f
+        limite_normal.lineWidth = 3f
         val limite_hipoglicemia = LimitLine(70f, "")
         limite_hipoglicemia.lineColor = Color.RED
-        limite_hipoglicemia.lineWidth = 1f
+        limite_hipoglicemia.lineWidth = 3f
+        val offset_line = LimitLine(-11.4f, "")
+        offset_line.lineColor = ContextCompat.getColor(this, R.color.colorAccent)
+        offset_line.lineWidth = 3f
 
-        chart_mpa.axisLeft .addLimitLine(limite_normal)
+        chart_mpa.axisLeft .addLimitLine(offset_line)
         chart_mpa.axisLeft .addLimitLine(limite_hipoglicemia)
         chart_mpa.axisLeft.addLimitLine(limite_normal)
+        chart_mpa.axisLeft.axisLineWidth = 3f
+        chart_mpa.axisLeft.axisLineColor = ContextCompat.getColor(this, R.color.colorAccent)
         xAxis.setValueFormatter(MyValueFormatter())
         xAxis.position = XAxis.XAxisPosition.TOP_INSIDE
         // Evita a duplicação dos dias na linha X
@@ -134,10 +148,11 @@ class DashBoardActivity : AppCompatActivity(), CoroutineScope, DashBoardContract
         val yAxisLeft = chart_mpa.axisLeft
         val yAxisRight = chart_mpa.axisRight
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            yAxisLeft.typeface =  resources.getFont(R.font.cursive_bold)
+            yAxisLeft.typeface =  resources.getFont(R.font.amatic_bold)
         }
         yAxisLeft.setDrawGridLines(false)
         yAxisLeft.textColor = ContextCompat.getColor(this, R.color.colorPrimaryDark)
+        yAxisLeft.textSize = 20f
         yAxisRight.isEnabled = false // Desabilita inhas Y a direita
 
         yAxisRight.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART)
@@ -152,22 +167,7 @@ class DashBoardActivity : AppCompatActivity(), CoroutineScope, DashBoardContract
 
     @SuppressLint("ResourceAsColor", "SetTextI18n")
     override fun onValueSelected(e: Entry?, h: Highlight?) {
-
-        if(e?.y!! <= 70f){
-            tv_Entry.setTextColor(
-                ContextCompat.getColor(this, R.color.colorHipoglicemia))
-        }
-        if((e.y >= 70f)and(e.y <=180f)){
-            tv_Entry.setTextColor(
-                ContextCompat.getColor(this, R.color.colorNormal))
-        }
-        if(e.y >= 180f){
-            tv_Entry.setTextColor(
-                ContextCompat.getColor(this,
-                    R.color.colorHiperglicemia
-                ))
-        }
-        tv_Entry.text = e.y.toString() + " mg/dl"
+        tv_Entry.text = e?.y.toString() + " mg/dl"
     }
 
     private val mOnNavigationItemSelectedListener =

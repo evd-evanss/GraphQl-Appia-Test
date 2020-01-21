@@ -8,4 +8,20 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="Widget.BottomNavigationView"
+        parent="Widget.Design.BottomNavigationView">
+        <item name="fontFamily">@font/amatic_sc_bold</item>
+    </style>
+
+    <style name="ButtonTheme"
+        parent="Widget.AppCompat.Button">
+        <item name="fontFamily">@font/amatic_sc_bold</item>
+    </style>
+
+    <style name="EditTextTheme"
+        parent="Widget.AppCompat.EditText">
+        <item name="fontFamily">@font/amatic_sc_bold</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
+
 </resources>

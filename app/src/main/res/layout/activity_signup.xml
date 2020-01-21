@@ -22,6 +22,8 @@
 
     <EditText
         android:id="@+id/et_email"
+        android:gravity="center"
+        android:theme="@style/EditTextTheme"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/iv_logo"
@@ -43,6 +45,8 @@
 
     <EditText
         android:id="@+id/et_password"
+        android:gravity="center"
+        android:theme="@style/EditTextTheme"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/et_email"
@@ -69,11 +73,14 @@
         android:layout_alignEnd="@+id/et_password"
         android:layout_alignRight="@+id/et_password"
         android:layout_marginBottom="239dp"
+        android:drawableEnd="@drawable/ic_logout"
         android:background="@drawable/button_radius"
-        android:textStyle="bold"
+        android:fontFamily="@font/amatic_sc_bold"
         android:onClick="signInClick"
         android:text="@string/entrar"
-        android:textColor="@android:color/white"
+        android:textColor="@color/colorAccent"
+        android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.79"

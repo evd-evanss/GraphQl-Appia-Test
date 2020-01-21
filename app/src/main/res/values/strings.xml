@@ -10,4 +10,17 @@
     <string name="deseja_finalizar_sessao">Deseja finalizar sessão?</string>
     <string name="cancelar">Cancelar</string>
     <string name="sim">Sim</string>
+    <string name="dicas">\n
+        Dicas de Como Baixar a Glicose Naturalmente\n\n
+        1. Preencha metade do seu prato com vegetais sem amido\n
+        2. Corte o volume de carboidratos\n
+        3. Escolha alimentos ricos em fibras\n
+        4. Corte o volume de carboidratos\n
+        5. Tenha horários e quantidades consistentes para as refeições\n
+        6. Tenha sempre alimentos prontos e pequenos lanches de emergência à mão\n
+        7. Exercite-se!\n
+        8. Converse com seu médico sobre a ingestão de bebidas alcoólicas\n
+        9. Beba água!\n
+        10. Durma bem e por tempo adequado\n
+    </string>
 </resources>

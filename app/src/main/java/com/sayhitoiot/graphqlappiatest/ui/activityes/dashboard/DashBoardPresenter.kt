@@ -31,7 +31,10 @@ class DashBoardPresenter(
             .okHttpClient(this.createOkHttpWithValidToken()!!)
             .build()
         val queryMea = MeasurementsQuery.builder().build()
-        // Coroutine
+
+        // O uso da função toDeferred () na referência ApolloCall
+        // converterá em uma referência adiada, com isso uso o await para aguardar a conclusão
+        //dessa chamada
         val measuresData =
             apolloClient.query(queryMea).toDeferred().await()
         // Instancio classe measurements gerada pelo Apollo
