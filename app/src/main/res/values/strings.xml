@@ -23,4 +23,7 @@
         9. Beba água!\n
         10. Durma bem e por tempo adequado\n
     </string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

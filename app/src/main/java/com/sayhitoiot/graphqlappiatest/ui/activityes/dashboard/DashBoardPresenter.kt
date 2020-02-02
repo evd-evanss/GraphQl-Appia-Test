@@ -25,16 +25,12 @@ class DashBoardPresenter(
         configDataSetValues(values)
     }
     // Busco dados a serem apresentados
-    suspend override fun queryMeasures(): MutableList<Entry> {
+    override suspend fun queryMeasures(): MutableList<Entry> {
         val apolloClient: ApolloClient = ApolloClient.builder()
             .serverUrl(BASE_URL)
             .okHttpClient(this.createOkHttpWithValidToken()!!)
             .build()
         val queryMea = MeasurementsQuery.builder().build()
-
-        // O uso da função toDeferred () na referência ApolloCall
-        // converterá em uma referência adiada, com isso uso o await para aguardar a conclusão
-        //dessa chamada
         val measuresData =
             apolloClient.query(queryMea).toDeferred().await()
         // Instancio classe measurements gerada pelo Apollo
@@ -48,8 +44,30 @@ class DashBoardPresenter(
                 values.add(Entry(pos++, it.measurement().toFloat()))
             }
         }
-        Log.i("medidas",values.toString())
+        Log.i("Medidas", dataMeasures.toString())
         return values
+    }
+
+    override suspend fun getMeasures(): MutableList<MeasurementsQuery.Measurement>{
+        val apolloClient: ApolloClient = ApolloClient.builder()
+            .serverUrl(BASE_URL)
+            .okHttpClient(this.createOkHttpWithValidToken()!!)
+            .build()
+        val queryMea = MeasurementsQuery.builder().build()
+        val measuresData =
+            apolloClient.query(queryMea).toDeferred().await()
+        // Instancio classe measurements gerada pelo Apollo
+        dataMeasures = arrayListOf()
+        values = arrayListOf()
+        dataMeasures = measuresData.data()?.measurements()!!
+        // Converto classe measurements em Entry para o MPAndroid chart
+        var pos = 0f
+        dataMeasures.forEach{
+            if(pos<7){
+                values.add(Entry(pos++, it.measurement().toFloat()))
+            }
+        }
+        return dataMeasures
     }
     // Configuro valores e cores
     override fun configDataSetValues(values: MutableList<Entry>){

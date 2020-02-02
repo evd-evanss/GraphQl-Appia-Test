@@ -1,18 +1,19 @@
 package com.sayhitoiot.graphqlappiatest.ui.activityes.dashboard
 
 import android.annotation.SuppressLint
-import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
-import android.view.Window
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DefaultItemAnimator
 import com.github.mikephil.charting.components.LimitLine
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
@@ -22,11 +23,12 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.sayhitoiot.graphqlappiatest.R
 import com.sayhitoiot.graphqlappiatest.util.MyValueFormatter
 import kotlinx.android.synthetic.main.activity_dashboard.*
-import kotlinx.android.synthetic.main.dialog_signout.*
+import kotlinx.android.synthetic.main.bottom_sheet_list.*
+import kotlinx.android.synthetic.main.bottom_appbar.*
 import kotlinx.android.synthetic.main.dialog_signout.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -41,17 +43,30 @@ class DashBoardActivity : AppCompatActivity(), CoroutineScope, DashBoardContract
     lateinit var presenter: DashBoardPresenter
     var token = ""
     override val coroutineContext: CoroutineContext get() = Dispatchers.Main + job
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
+    lateinit var adapter: MeasuresAdapter
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
+        bottomSheetBehavior = BottomSheetBehavior.from<ConstraintLayout>(heroislist)
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+
         val sharedPref = this.getSharedPreferences("my_token_data",Context.MODE_PRIVATE) ?: return
         token = sharedPref.getString("token", "vazio")!!
         chart_mpa.setNoDataText("")
         chart_mpa.setOnChartValueSelectedListener(this)
-        navigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
         presenter = token.let { DashBoardPresenter(this, it) }
+
     }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.menu_item, menu)
+        return true
+    }
+
 
     override fun onStart() {
         super.onStart()
@@ -60,7 +75,12 @@ class DashBoardActivity : AppCompatActivity(), CoroutineScope, DashBoardContract
 
         launch {
             presenter.configDataEntries()
+            initializeAdapter()
+
+            recycler_view.itemAnimator = DefaultItemAnimator()
+            recycler_view.adapter = adapter
         }
+
     }
 
     override fun onDestroy() {
@@ -82,13 +102,6 @@ class DashBoardActivity : AppCompatActivity(), CoroutineScope, DashBoardContract
         }
         dialog.create().show()
 
-    }
-
-    fun tipsClick(view: View){
-        val layout = LayoutInflater.from(this).inflate(R.layout.dialog_tips, null, false)
-        val dialog = AlertDialog.Builder(this).setView(layout)
-        dialog.setNegativeButton("Voltar", null)
-        dialog.create().show()
     }
 
     override fun plotterGraph(lineDataSet: LineDataSet) {
@@ -161,6 +174,13 @@ class DashBoardActivity : AppCompatActivity(), CoroutineScope, DashBoardContract
         chart_mpa.axisLeft .mAxisRange = chart_mpa.axisLeft .mAxisMaximum - chart_mpa.axisLeft .mAxisMinimum
     }
 
+    override suspend fun initializeAdapter() {
+        adapter =
+            MeasuresAdapter(
+                presenter.getMeasures()
+            )
+    }
+
     override fun onNothingSelected() {
 
     }
@@ -170,30 +190,41 @@ class DashBoardActivity : AppCompatActivity(), CoroutineScope, DashBoardContract
         tv_Entry.text = e?.y.toString() + " mg/dl"
     }
 
-    private val mOnNavigationItemSelectedListener =
-        BottomNavigationView.OnNavigationItemSelectedListener { menuItem ->
-        when (menuItem.itemId) {
-            R.id.nav_linear -> {
+    fun onClick(view: View) {
+        when(view){
+
+            fab ->{
+                launch {
+                    presenter.configDataEntries()
+                    initializeAdapter()
+                }
+                if (bottomSheetBehavior.state != BottomSheetBehavior.STATE_EXPANDED) {
+                    bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                    //buttonSlideUp.text = "Deslize para baixo"
+                } else {
+                    bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED;
+                    //buttonSlideUp.text = "Deslize para cima"
+                }
+            }
+            iv_linear ->{
+                iv_linear.animate()
                 measuresDataset.mode = LineDataSet.Mode.LINEAR
                 chart_mpa.invalidate()
-                return@OnNavigationItemSelectedListener true
             }
-            R.id.nav_horizontal -> {
+            iv_bezier ->{
                 measuresDataset.mode = LineDataSet.Mode.HORIZONTAL_BEZIER
                 chart_mpa.invalidate()
-                return@OnNavigationItemSelectedListener true
             }
-            R.id.nav_cubic -> {
-                measuresDataset.mode = LineDataSet.Mode.CUBIC_BEZIER
-                chart_mpa.invalidate()
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.nav_est -> {
+            iv_cubic ->{
                 measuresDataset.mode = LineDataSet.Mode.STEPPED
                 chart_mpa.invalidate()
-                return@OnNavigationItemSelectedListener true
             }
+            iv_tips ->{
+                val layout = LayoutInflater.from(this).inflate(R.layout.dialog_tips, null, false)
+                val dialog = AlertDialog.Builder(this).setView(layout)
+                dialog.setNegativeButton("Voltar", null)
+                dialog.create().show()            }
         }
-        false
+
     }
 }

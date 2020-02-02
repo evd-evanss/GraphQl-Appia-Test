@@ -1,22 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <item
         android:id="@+id/nav_linear"
         android:icon="@drawable/ic_show_chart_black_24dp"
-        android:title="Linear"/>
+        android:title="Linear"
+        app:showAsAction="always"/>
 
     <item
         android:id="@+id/nav_horizontal"
         android:icon="@drawable/horizontal_bezier"
-        android:title="Bezier Horizontal"/>
+        android:title="Bezier Horizontal"
+        app:showAsAction="always"/>
     <item
         android:id="@+id/nav_cubic"
         android:icon="@drawable/cubicbeziercurve"
-        android:title="Bezier Cubico"/>
+        android:title="Bezier Cubico"
+        app:showAsAction="always"/>
 
     <item
         android:id="@+id/nav_est"
         android:icon="@drawable/stepped"
-        android:title="Etapas"/>
+        android:title="Etapas"
+        app:showAsAction="always"/>
 
 </menu>
